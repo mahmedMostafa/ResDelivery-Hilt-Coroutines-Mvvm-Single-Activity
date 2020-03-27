@@ -69,6 +69,7 @@ class CartFragment : Fragment(), View.OnClickListener, CartAdapter.OnItemClickLi
     }
 
     private fun showEmptyCart() {
+        binding.completeButton.visibility = View.INVISIBLE
         binding.emptyCartAnimation.visibility = View.VISIBLE
         binding.emptyCartText.visibility = View.VISIBLE
     }

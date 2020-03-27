@@ -65,7 +65,9 @@ class FoodListViewModel(
     fun getLastKnownLocation() {
         Timber.d("getLastKnownLocation Called")
         fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
+            Timber.d("I'm in the task")
             if (task.isSuccessful) {
+                Timber.d("I'm in the task successful")
                 //the result sometimes returns null and idk why
                 task.result?.let {
                     val location: Location = it
@@ -79,8 +81,16 @@ class FoodListViewModel(
                     Timber.d(sessionManagement.getUserLatitude().toString())
                     Timber.d(sessionManagement.getUserLongitude().toString())
                 }
+                if (task.result == null) {
+                    Timber.d("it returns null")
+                    sessionManagement.setUserLocation("31", "30")
+                }
             } else {
                 Timber.e(task.exception?.message)
+                sessionManagement.setUserLocation(
+                    "31",
+                    "30"
+                )
             }
         }
 //        val locationWork = OneTimeWorkRequestBuilder<LocationWork>()

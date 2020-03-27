@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.codingwithmitch.googlemaps2018.models.ClusterMarker
@@ -52,7 +53,13 @@ class MapFragment : Fragment(),
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
-        binding.resetMapButton.setOnClickListener { addMapMarkers(shopBranches) }
+        binding.deliverHereButton.setOnClickListener {
+            Toast.makeText(
+                activity!!,
+                "Soon",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
         setUpMapView(savedInstanceState)
         subscribeToObserver()
         //setCameraView()
@@ -70,20 +77,7 @@ class MapFragment : Fragment(),
         })
     }
 
-    private fun resetMap() {
-//        googleMap?.let {
-//            it.clear()
-//        }
-        //clusterManager.clearItems()
-        if (clusterMarkers.size > 0) {
-            clusterMarkers.clear()
-            clusterMarkers = mutableListOf()
-        }
-    }
-
     private fun addMapMarkers(branches: List<Branch>) {
-
-        resetMap()
 
         clusterManager = ClusterManager(activity!!.applicationContext, googleMap)
         clusterManagerRenderer = MyClusterManagerRenderer(

@@ -17,15 +17,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/reset_map_button"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/deliver_here_button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:padding="12dp"
-            android:src="@drawable/ic_restore"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/large_button"
+            android:text="@string/deliver_here"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
