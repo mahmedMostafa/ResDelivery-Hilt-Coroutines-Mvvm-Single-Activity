@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "681080484294",
+    "firebase_url": "https://resdelivery-bd7be.firebaseio.com",
+    "project_id": "resdelivery-bd7be",
+    "storage_bucket": "resdelivery-bd7be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:681080484294:android:d83c1b8d7ac9e421a482c7",
+        "android_client_info": {
+          "package_name": "com.example.resdelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "681080484294-no5bet3aujc60uith2db3valtduhho4j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.resdelivery",
+            "certificate_hash": "db7c5e82641b980e7b577034122231e240bdeab7"
+          }
+        },
+        {
+          "client_id": "681080484294-q7r6d1bu2sjkm3h711c8qbcfpd65jes9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAai49rvRlYUNwXW0wheRsuqkIc35FW20U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "681080484294-q7r6d1bu2sjkm3h711c8qbcfpd65jes9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

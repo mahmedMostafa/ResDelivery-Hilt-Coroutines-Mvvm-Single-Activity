@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">ResDelivery</string>
+    <string name="google_maps_api_key">AIzaSyDZBZgv2Y-HeR6SS6FqBXHwEPhRsP5Qhd8</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
+    <string name="name">Name</string>
+    <string name="meal_image">Meal Image</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="your_cart_is_empty">Your Cart is Empty</string>
+    <string name="added_to_Cart">ADDED TO CART</string>
+    <string name="cart">Cart</string>
+    <string name="search">Search</string>
+    <string name="log_out">Log out</string>
+    <string name="complete_your_order">Complete your Order</string>
+</resources>
