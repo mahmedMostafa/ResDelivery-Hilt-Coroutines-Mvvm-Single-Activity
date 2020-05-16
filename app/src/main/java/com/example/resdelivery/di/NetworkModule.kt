@@ -1,6 +1,6 @@
 package com.example.resdelivery.di
 
-import com.example.resdelivery.network.requests.ApiService
+import com.example.resdelivery.data.network.requests.ApiService
 import com.example.resdelivery.util.C.Companion.BASE_URL
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi

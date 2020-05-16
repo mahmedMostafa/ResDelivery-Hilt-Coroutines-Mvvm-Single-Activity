@@ -1,7 +1,7 @@
-package com.example.resdelivery.network.requests
+package com.example.resdelivery.data.network.requests
 
-import com.example.resdelivery.network.responses.FoodListResponse
-import com.example.resdelivery.network.responses.MealResponse
+import com.example.resdelivery.data.network.responses.FoodListResponse
+import com.example.resdelivery.data.network.responses.MealResponse
 import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Query

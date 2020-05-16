@@ -1,4 +1,4 @@
-package com.example.resdelivery.network.responses
+package com.example.resdelivery.data.network.responses
 
 import com.example.resdelivery.models.Meal
 import com.squareup.moshi.Json

@@ -20,7 +20,6 @@ import kotlin.math.roundToInt
 
 class DetailFragment : Fragment(), View.OnClickListener {
 
-
     private lateinit var binding: DetailFragmentBinding
     private var mealId: String = ""
     private lateinit var currentMeal: Meal
@@ -46,8 +45,13 @@ class DetailFragment : Fragment(), View.OnClickListener {
         viewModel.getMeal(mealId)
         viewModel.meal.observe(viewLifecycleOwner, Observer { meal ->
             meal?.let {
-                currentMeal = it
-                bindProperties(it)
+                if (viewModel.status.value == STATUS.SUCCESS) {
+                    binding.progressBar.visibility = View.INVISIBLE
+                    currentMeal = it
+                    bindProperties(it)
+                }else{
+                    binding.progressBar.visibility = View.VISIBLE
+                }
             }
         })
 
@@ -81,24 +85,23 @@ class DetailFragment : Fragment(), View.OnClickListener {
         binding.addToCartLayout.visibility = View.VISIBLE
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        //binding.itemContainer.transitionName = arguments.transitionName
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 
     private fun setIngredients(meal: Meal) {
         binding.ingredientsContainer.removeAllViews()
         meal.ingredients.let {
             for (item in it) run {
-                var textView = TextView(activity).apply {
+                val textView = TextView(activity).apply {
                     text = item
                     textSize = 15F
                     layoutParams = LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     )
-                    binding.ingredientsContainer.addView(this)
                 }
+                binding.ingredientsContainer.addView(textView)
             }
         }
     }
@@ -118,20 +121,6 @@ class DetailFragment : Fragment(), View.OnClickListener {
                 DetailFragmentDirections.actionDetailFragmentToCartFragment()
             )
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        /*
-        this was supposed to be the entering container animation but unfortunately it didn't work properly
-
-        val transformation: MaterialContainerTransform = MaterialContainerTransform(requireContext()).apply {
-            fadeMode = MaterialContainerTransform.FADE_MODE_IN
-            pathMotion = MaterialArcMotion()
-            duration = 450
-        }
-        sharedElementEnterTransition = transformation
-        */
     }
 
 }

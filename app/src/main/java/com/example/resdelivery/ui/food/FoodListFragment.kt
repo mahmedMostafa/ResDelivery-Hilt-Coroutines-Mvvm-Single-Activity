@@ -1,6 +1,10 @@
 package com.example.resdelivery.ui.food
 
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -21,8 +25,13 @@ import android.content.pm.PackageManager
 import android.content.Context
 import android.location.LocationManager
 import android.provider.Settings
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.LinearInterpolator
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import com.example.resdelivery.R
 import com.example.resdelivery.util.C.Companion.PERMISSION_REQUEST_ACCESS_FINE_LOCATION
 import com.example.resdelivery.util.C.Companion.PERMISSION_REQUEST_ENABLE_GPS
 import org.koin.android.viewmodel.ext.android.getViewModel
@@ -57,7 +66,7 @@ class FoodListFragment : Fragment(), FoodListAdapter.OnItemClickListener {
     ): View? {
         binding = DataBindingUtil.inflate(
             inflater,
-            com.example.resdelivery.R.layout.fragment_food_list,
+            R.layout.fragment_food_list,
             container,
             false
         )
@@ -80,7 +89,7 @@ class FoodListFragment : Fragment(), FoodListAdapter.OnItemClickListener {
     private fun checkMaps() {
         if (checkMapServices()) {
             if (locationGranted) {
-                viewModel.getFood()
+                viewModel.refreshMeals()
                 viewModel.getLastKnownLocation()
             } else {
                 getLocationPermission()
@@ -123,20 +132,68 @@ class FoodListFragment : Fragment(), FoodListAdapter.OnItemClickListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(com.example.resdelivery.R.menu.food_list_menu, menu)
+        inflater.inflate(R.menu.food_list_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
+    private fun shower() {
+        var x = 20
+        while (x-- != 0) {
+            val container = binding.star.parent as ViewGroup
+            val containerW = container.width
+            val containerH = container.height
+            val starW: Float = binding.star.width.toFloat()
+            val starH: Float =  binding.star.height.toFloat()
+
+            val newStar = AppCompatImageView(activity!!)
+            newStar.setImageResource(R.drawable.ic_star)
+            newStar.layoutParams = ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT
+            )
+            container.addView(newStar)
+            //set the size of the star to be a random number ( from .1x to 1.6x of its default size)
+            newStar.scaleX = Math.random().toFloat() * 1.5f + .1f
+            newStar.scaleY = newStar.scaleX
+            //random x position
+            //This code uses the width of the star to position it from half-way off the screen on the left (-starW / 2)
+            // to half-way off the screen on the right (with the star positioned at (containerW - starW / 2).
+            newStar.translationX = Math.random().toFloat() * containerW - starW / 2
+            //to move the star from off the screen at the top to off the screen at the bottom
+            val mover =
+                ObjectAnimator.ofFloat(newStar, View.TRANSLATION_Y, containerH + starH,-starH)
+           // val vibrate = ObjectAnimator.ofFloat(newStar,View.TRANSLATION_X,Math.random().toFloat() * 2f + -4f)
+            //accelerate the movement
+            mover.interpolator = AccelerateInterpolator(Math.random().toFloat() * 1f + .5f)
+            //the star will rotate a random amount between 0 and 1080 degrees (three times around)
+            val rotator =
+                ObjectAnimator.ofFloat(newStar, View.ROTATION, (Math.random() * 1080).toFloat())
+            rotator.interpolator = LinearInterpolator()
+            //AnimatorSet is basically a group of animations, along with instructions on when to run those animations
+            val set = AnimatorSet()
+            set.playTogether(mover, rotator)
+            set.duration = (Math.random() * 3000 + 2000).toLong() // from 500 to 1600 ml
+            //and don't forget to remove the animation once it's done
+            set.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animator: Animator?) {
+                    container.removeView(newStar)
+                }
+            })
+            set.start()
+        }
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            com.example.resdelivery.R.id.cartFragment -> this.findNavController().navigate(
+            R.id.cartFragment -> this.findNavController().navigate(
                 FoodListFragmentDirections.actionFoodListFragmentToCartFragment()
             )
-            com.example.resdelivery.R.id.action_log_out -> {
+            R.id.action_log_out -> {
                 viewModel.logOutUser()
                 this.findNavController()
                     .navigate(FoodListFragmentDirections.actionFoodListFragmentToLoginFragment())
             }
+            R.id.action_search -> shower()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -220,7 +277,7 @@ class FoodListFragment : Fragment(), FoodListAdapter.OnItemClickListener {
             == PackageManager.PERMISSION_GRANTED
         ) {
             locationGranted = true
-            viewModel.getFood()
+            viewModel.refreshMeals()
             Timber.d("I get called")
             viewModel.getLastKnownLocation()
         } else {
@@ -247,7 +304,7 @@ class FoodListFragment : Fragment(), FoodListAdapter.OnItemClickListener {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Timber.d("location granted")
                     locationGranted = true
-                    viewModel.getFood()
+                    viewModel.refreshMeals()
                 }
             }
         }
@@ -259,7 +316,7 @@ class FoodListFragment : Fragment(), FoodListAdapter.OnItemClickListener {
         when (requestCode) {
             PERMISSION_REQUEST_ENABLE_GPS -> {
                 if (locationGranted) {
-                    viewModel.getFood()
+                    viewModel.refreshMeals()
                     viewModel.getLastKnownLocation()
                 } else {
                     getLocationPermission()

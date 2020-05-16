@@ -15,7 +15,7 @@ val viewModelModule = module {
 
     viewModel { CartViewModel(get(), get()) }
 
-    viewModel { DetailViewModel(get(), get(), get()) }
+    viewModel { DetailViewModel(get()) }
 
     viewModel { LoginViewModel(get(), get()) }
 
@@ -23,5 +23,5 @@ val viewModelModule = module {
 
     viewModel { MapViewModel(get()) }
 
-    viewModel { FoodListViewModel(get(), get() , get()) }
+    viewModel { FoodListViewModel(get()) }
 }

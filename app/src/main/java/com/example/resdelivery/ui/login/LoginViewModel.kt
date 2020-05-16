@@ -4,11 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.resdelivery.util.SessionManagement
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginViewModel(
     private val sessionManagement: SessionManagement,
-    private val auth : FirebaseAuth
+    private val auth: FirebaseAuth
 ) : ViewModel() {
 
     private val _showProgress = MutableLiveData<Boolean>()
@@ -28,7 +29,7 @@ class LoginViewModel(
         _navigateToMap.value = null
     }
 
-    fun doneShowingError(){
+    fun doneShowingError() {
         _errorMessage.value = null
     }
 
@@ -39,13 +40,17 @@ class LoginViewModel(
                 _showProgress.value = false
                 _navigateToMap.value = true
                 //sessionManagement.setLoggedIn()
-                sessionManagement.createSession(true, auth.uid!!,"",email)
+                sessionManagement.createSession(true, auth.uid!!, "", email)
             } else {
                 _errorMessage.value = task.exception?.message.toString()
                 _showProgress.value = false
             }
         }
     }
+
+//    suspend fun login(email : String , password: String) : AuthResult? {
+//
+//    }
 
     fun validateEmail(email: String): String {
         if (email.trim().isEmpty() || email.length == 0) {
