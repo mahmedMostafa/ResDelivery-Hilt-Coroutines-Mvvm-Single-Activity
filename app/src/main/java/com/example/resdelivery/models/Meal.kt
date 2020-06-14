@@ -6,6 +6,8 @@ import com.example.resdelivery.data.local.IngredientsTypeConverter
 import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
 
+typealias Meals = List<Meal>
+
 @Parcelize
 @Entity(tableName = "meals")
 data class Meal(

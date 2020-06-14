@@ -92,8 +92,11 @@ dependencies {
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 
     // ViewModel and LiveData
-    def lifecycle_version = '2.1.0-alpha03'
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    def archLifecycleVersion = '2.2.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
+    kapt "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$archLifecycleVersion"
 
     // Moshi
     def version_moshi = "1.8.0"
@@ -101,7 +104,7 @@ dependencies {
     implementation "com.squareup.moshi:moshi-kotlin:$version_moshi"
 
     // Retrofit with Moshi Converter
-    def version_retrofit = "2.5.0"
+    def version_retrofit = "2.6.0"
     implementation "com.squareup.retrofit2:retrofit:$version_retrofit"
     implementation "com.squareup.retrofit2:converter-moshi:$version_retrofit"
 

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -14,10 +15,14 @@ import com.bumptech.glide.RequestManager
 import com.example.resdelivery.R
 import com.example.resdelivery.databinding.DetailFragmentBinding
 import com.example.resdelivery.models.Meal
+import com.example.resdelivery.util.Result
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
 import kotlin.math.roundToInt
 
+@ExperimentalCoroutinesApi
 class DetailFragment : Fragment(), View.OnClickListener {
 
     private lateinit var binding: DetailFragmentBinding
@@ -42,34 +47,27 @@ class DetailFragment : Fragment(), View.OnClickListener {
 
     private fun subscribeToObserver() {
         viewModel = getViewModel()
-        viewModel.getMeal(mealId)
-        viewModel.meal.observe(viewLifecycleOwner, Observer { meal ->
-            meal?.let {
-                if (viewModel.status.value == STATUS.SUCCESS) {
-                    binding.progressBar.visibility = View.INVISIBLE
-                    currentMeal = it
-                    bindProperties(it)
-                }else{
+        viewModel.getMeal(mealId).observe(viewLifecycleOwner, Observer { result ->
+            when (result) {
+                is Result.Success -> {
+                    receivedData(result.data)
+                }
+                is Result.Error -> {
+                    receivedData(result.data)
+                    Toast.makeText(requireContext(), "Loading from cache", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                is Result.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
                 }
             }
         })
+    }
 
-        viewModel.status.observe(viewLifecycleOwner, Observer {
-            if (it == STATUS.LOADING) {
-                binding.progressBar.visibility = View.VISIBLE
-            } else {
-                binding.progressBar.visibility = View.INVISIBLE
-            }
-        })
-
-        viewModel.cartInserted.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                binding.buttonProgress.visibility = View.INVISIBLE
-                binding.buttonText.visibility = View.VISIBLE
-                binding.buttonText.text = getString(R.string.added_to_Cart)
-            }
-        })
+    private fun receivedData(meal: Meal) {
+        binding.progressBar.visibility = View.INVISIBLE
+        currentMeal = meal
+        bindProperties(meal)
     }
 
     private fun bindProperties(meal: Meal) {
@@ -83,10 +81,6 @@ class DetailFragment : Fragment(), View.OnClickListener {
         setIngredients(meal)
         binding.backImage.visibility = View.VISIBLE
         binding.addToCartLayout.visibility = View.VISIBLE
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 
     private fun setIngredients(meal: Meal) {

@@ -50,11 +50,10 @@ class RegisterViewModel(
                             .addOnCompleteListener { task ->
                                 _showProgress.value = false
                                 _navigateToMap.value = true
-                                if (task.isSuccessful){
-                                    sessionManagement.createSession(true,it,name,email)
+                                if (task.isSuccessful) {
+                                    sessionManagement.createSession(true, it, name, email)
                                     Timber.d(sessionManagement.isLoggedIn().toString())
-                                }
-                                else Log.d("RegisterViewModel", task.exception?.message.toString())
+                                } else Timber.d(task.exception?.message.toString())
                             }
                     }
                 } else {

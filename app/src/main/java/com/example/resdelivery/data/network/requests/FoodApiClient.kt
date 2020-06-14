@@ -10,15 +10,13 @@ import retrofit2.http.Query
 interface ApiService {
 
     @GET("api/search")
-    fun getFood(
+    suspend fun getFood(
         @Query("q") query: String
-    ):
-            Deferred<FoodListResponse>
+    ): FoodListResponse
 
     @GET("api/get")
-    fun getMeal(
+    suspend fun getMeal(
         @Query("rId") mealId: String
-    ):
-            Deferred<MealResponse>
+    ): MealResponse
 
 }
