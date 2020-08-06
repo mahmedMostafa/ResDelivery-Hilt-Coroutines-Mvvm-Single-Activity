@@ -4,10 +4,12 @@
       <w>coroutine</w>
       <w>coroutines</w>
       <w>firestore</w>
+      <w>gemy</w>
       <w>koin</w>
       <w>latlng</w>
       <w>moshi</w>
       <w>polylines</w>
+      <w>snackbar</w>
     </words>
   </dictionary>
 </component>

@@ -3,7 +3,7 @@ package com.example.resdelivery.workers
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.example.resdelivery.ui.food.FoodListRepository
+import com.example.resdelivery.features.food.domain.FoodListRepository
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import retrofit2.HttpException

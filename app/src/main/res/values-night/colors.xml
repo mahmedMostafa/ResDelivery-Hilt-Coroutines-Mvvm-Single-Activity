@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#002022</color>
+    <color name="colorPrimaryDark">#002022</color>
+    <color name="colorAccent">#FF5252</color>
+    <color name="secondaryText">#757575</color>
+    <color name="white">#ffff</color>
+    <color name="background">#001719</color>
+    <color name="darkGrey">#a6a6a6</color>
+<!--    <color name="colorTextPrimary">@android:color/primary_text_dark</color>-->
+    <color name="colorFoodItemBackground">@color/white</color>
+    <color name="colorFoodList">#002022</color>
+    <color name="colorSelectedPolyline">#66a3ff</color>
+    <color name="bulbColor">@android:color/white</color>
+</resources>

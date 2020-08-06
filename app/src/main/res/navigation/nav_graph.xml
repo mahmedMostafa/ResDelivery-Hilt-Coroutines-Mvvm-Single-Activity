@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.resdelivery.ui.login.LoginFragment"
+        android:name="com.example.resdelivery.features.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.resdelivery.ui.register.RegisterFragment"
+        android:name="com.example.resdelivery.features.register.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
@@ -31,16 +31,20 @@
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.example.resdelivery.ui.map.MapFragment"
+        android:name="com.example.resdelivery.features.map.MapFragment"
         android:label="Map Delivery"
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/foodListFragment"
-        android:name="com.example.resdelivery.ui.food.FoodListFragment"
+        android:name="com.example.resdelivery.features.food.representation.FoodListFragment"
         android:label="FoodListFragment" >
         <action
             android:id="@+id/action_foodListFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
         <action
             android:id="@+id/action_foodListFragment_to_cartFragment"
             app:destination="@id/cartFragment" />
@@ -51,7 +55,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.example.resdelivery.ui.detail.DetailFragment"
+        android:name="com.example.resdelivery.features.detail.representation.DetailFragment"
         android:label="DetailFragment" >
         <action
             android:id="@+id/action_detailFragment_to_foodListFragment"
@@ -62,10 +66,13 @@
         <action
             android:id="@+id/action_detailFragment_to_cartFragment"
             app:destination="@id/cartFragment" />
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
-        android:name="com.example.resdelivery.ui.cart.CartFragment"
+        android:name="com.example.resdelivery.features.cart.CartFragment"
         android:label="Cart" >
         <action
             android:id="@+id/action_cartFragment_to_detailFragment"
@@ -75,4 +82,9 @@
             android:id="@+id/action_cartFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.resdelivery.features.splash.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" />
 </navigation>

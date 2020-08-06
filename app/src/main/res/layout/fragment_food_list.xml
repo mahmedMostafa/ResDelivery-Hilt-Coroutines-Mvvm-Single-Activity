@@ -6,24 +6,28 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="viewmodel"
+            type="com.example.resdelivery.features.food.representation.FoodListViewModel" />
     </data>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#EEE8E8"
-        tools:context=".ui.food.FoodListFragment">
+        android:background="@color/colorFoodList"
+        tools:context=".features.food.representation.FoodListFragment">
 
-        <ImageView
-            android:id="@+id/star"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="invisible"
+        <View
+            android:id="@+id/status_bar"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:background="@color/colorPrimaryDark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_star" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tool_bar"
@@ -31,33 +35,105 @@
             android:layout_height="56dp"
             android:background="@color/colorPrimary"
             android:elevation="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/chip_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@id/status_bar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <HorizontalScrollView
+            android:id="@+id/chip_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="60dp"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tool_bar" />
+            app:layout_constraintTop_toBottomOf="@id/tool_bar">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group"
+                style="@style/CustomChipChoice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                app:checkedChip="@id/checken_chip"
+                app:checkedIconVisible="false"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/checken_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chechen"
+                    android:textColor="@android:color/primary_text_light"
+                    app:checkedIconVisible="false"
+                    app:chipBackgroundColor="@drawable/selected_chip_color" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chechen_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Burger"
+                    android:textColor="@android:color/primary_text_light"
+                    app:checkedIconVisible="true"
+                    app:chipBackgroundColor="@drawable/selected_chip_color" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/pizza_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pizza"
+                    android:textColor="@android:color/primary_text_light"
+                    app:checkedIconVisible="true"
+                    app:chipBackgroundColor="@drawable/selected_chip_color" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/bacon_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bacon"
+                    android:textColor="@android:color/primary_text_light"
+                    app:checkedIconVisible="true"
+                    app:chipBackgroundColor="@drawable/selected_chip_color" />
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/pagination_progress"
+            app:layout_constraintTop_toBottomOf="@id/chip_layout"
+            app:refreshing="@{viewmodel.loading}">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <ProgressBar
-            android:id="@+id/progress_bar"
+            android:id="@+id/pagination_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="@{viewmodel.paginationLoading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/swipe_refresh_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

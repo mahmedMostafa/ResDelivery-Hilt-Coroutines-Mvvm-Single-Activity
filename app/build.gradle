@@ -84,7 +84,9 @@ dependencies {
 
     //Material Design
     def material_version = "1.2.0-alpha05"
+    def recycler_view_version = "1.2.0-alpha01"
     implementation "com.google.android.material:material:$material_version"
+    implementation "androidx.recyclerview:recyclerview:$recycler_view_version"
 
     // Glide
     def glideVersion = "4.9.0"
@@ -112,6 +114,7 @@ dependencies {
     def version_kotlin_coroutines = "0.9.2"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version_kotlin_coroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version_kotlin_coroutines"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
 
     // Retrofit Coroutines Support
     def version_retrofit_coroutines_adapter = "0.9.2"
