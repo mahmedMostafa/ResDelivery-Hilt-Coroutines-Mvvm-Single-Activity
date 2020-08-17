@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.codingwithmitch.googlemaps2018.models.ClusterMarker
 import com.example.resdelivery.R
@@ -23,27 +24,30 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.maps.GeoApiContext
 import com.google.maps.android.clustering.ClusterManager
-import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.getViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
  */
+@AndroidEntryPoint
 class MapFragment : Fragment(),
     OnMapReadyCallback,
     GoogleMap.OnInfoWindowClickListener {
 
 
-    private val sessionManager: SessionManagement by inject()
+    @Inject
+    lateinit var sessionManager: SessionManagement
     private lateinit var binding: FragmentMapBinding
-    private lateinit var viewModel: MapViewModel
+    private val viewModel: MapViewModel by viewModels()
 
     //Map
     private lateinit var googleMap: GoogleMap
     private lateinit var mapBoundary: LatLngBounds
     private lateinit var clusterManager: ClusterManager<ClusterMarker>
-//    private lateinit var clusterManagerRenderer: MyClusterManagerRenderer
+
+    //    private lateinit var clusterManagerRenderer: MyClusterManagerRenderer
     private lateinit var geoApiContext: GeoApiContext
     private var clusterMarkers: MutableList<ClusterMarker> = mutableListOf()
     private var shopBranches = mutableListOf<Branch>()
@@ -55,7 +59,7 @@ class MapFragment : Fragment(),
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
         binding.deliverHereButton.setOnClickListener {
             Toast.makeText(
-                activity!!,
+                requireActivity(),
                 "Soon",
                 Toast.LENGTH_SHORT
             ).show()
@@ -67,7 +71,6 @@ class MapFragment : Fragment(),
     }
 
     private fun subscribeToObserver() {
-        viewModel = getViewModel()
         viewModel.branches.observe(viewLifecycleOwner, Observer { branches ->
             if (viewModel.getDone()!!) {
 //                addMapMarkers(branches)

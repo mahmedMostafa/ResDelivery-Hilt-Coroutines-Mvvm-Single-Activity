@@ -16,9 +16,10 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class DetailRepository(
+class DetailRepository @Inject constructor(
     private val sessionManagement: SessionManagement,
     private val database: FirebaseFirestore,
     private val foodApi: ApiService,

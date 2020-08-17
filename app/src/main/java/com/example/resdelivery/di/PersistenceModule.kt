@@ -1,19 +1,33 @@
 package com.example.resdelivery.di
 
+import android.content.Context
 import androidx.room.Room
 import com.example.resdelivery.data.local.MealsDatabase
-import org.koin.android.ext.koin.androidApplication
-import org.koin.dsl.module
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Singleton
 
-val persistenceModule = module {
 
-    single {
-        Room.databaseBuilder(
-            androidApplication(),
+@InstallIn(ApplicationComponent::class)
+@Module
+object PersistenceModule {
+
+    @Singleton
+    @Provides
+    fun provideRoomSingleton(
+        @ApplicationContext context: Context
+    ): MealsDatabase {
+        return Room.databaseBuilder(
+            context,
             MealsDatabase::class.java,
             "meals.db"
         ).build()
     }
 
-    single { get<MealsDatabase>().getMealsDao() }
+    @Singleton
+    @Provides
+    fun provideDao(database: MealsDatabase) = database.getMealsDao()
 }

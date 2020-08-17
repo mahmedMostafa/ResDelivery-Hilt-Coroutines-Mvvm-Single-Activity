@@ -1,42 +1,35 @@
 package com.example.resdelivery.features.detail.representation
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.transition.TransitionInflater
 import com.bumptech.glide.RequestManager
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.example.resdelivery.R
 import com.example.resdelivery.databinding.DetailFragmentBinding
 import com.example.resdelivery.extensions.setSharedElementTransitionOnEnter
 import com.example.resdelivery.extensions.startEnterTransitionAfterLoadingImage
 import com.example.resdelivery.models.Meal
-import com.example.resdelivery.util.Result
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.getViewModel
-import kotlin.math.roundToInt
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
+@AndroidEntryPoint
 class DetailFragment : Fragment() {
 
     private lateinit var binding: DetailFragmentBinding
     private var mealId: String = ""
     private lateinit var currentMeal: Meal
-    private lateinit var viewModel: DetailViewModel
-    private val glide: RequestManager by inject()
+    private val viewModel: DetailViewModel by viewModels()
+
+    @Inject
+    lateinit var glide: RequestManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,7 +58,6 @@ class DetailFragment : Fragment() {
     }
 
     private fun subscribeToObserver() {
-        viewModel = getViewModel()
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.getMeal(mealId)

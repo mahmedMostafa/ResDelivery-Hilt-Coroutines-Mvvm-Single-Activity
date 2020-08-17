@@ -14,30 +14,36 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.RequestManager
 import com.example.resdelivery.R
 import com.example.resdelivery.databinding.FragmentFoodListBinding
 import com.example.resdelivery.features.food.adapters.FoodListAdapter
 import com.example.resdelivery.models.Meal
 import com.example.resdelivery.models.Meals
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.koin.android.viewmodel.ext.android.getViewModel
 import timber.log.Timber
+import javax.inject.Inject
 
 
 @ExperimentalCoroutinesApi
+@AndroidEntryPoint
 class FoodListFragment : Fragment(),
     FoodListAdapter.OnItemClickListener {
 
+    @Inject
+    lateinit var glide: RequestManager
     private lateinit var binding: FragmentFoodListBinding
     private lateinit var foodAdapter: FoodListAdapter
     private var list: List<Meal> = ArrayList()
 
-    private lateinit var viewModel: FoodListViewModel
+    private val viewModel: FoodListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,8 +74,7 @@ class FoodListFragment : Fragment(),
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        foodAdapter = FoodListAdapter(this, arrayListOf())
-        viewModel = getViewModel()
+        foodAdapter = FoodListAdapter(this, arrayListOf(), glide)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = this
         setUpToolbar()

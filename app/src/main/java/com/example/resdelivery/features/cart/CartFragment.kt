@@ -6,22 +6,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.RequestManager
 import com.example.resdelivery.R
 import com.example.resdelivery.databinding.CartFragmentBinding
 import com.example.resdelivery.models.Meal
-import org.koin.android.viewmodel.ext.android.getViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class CartFragment : Fragment(), View.OnClickListener, CartAdapter.OnItemClickListener {
 
+    @Inject
+    lateinit var glide: RequestManager
 
     private lateinit var binding: CartFragmentBinding
     private var carts: MutableList<Meal> = mutableListOf()
-    private val adapter = CartAdapter(carts, this)
-    private lateinit var viewModel : CartViewModel
+    private lateinit var adapter: CartAdapter
+    private val viewModel: CartViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,13 +44,13 @@ class CartFragment : Fragment(), View.OnClickListener, CartAdapter.OnItemClickLi
     }
 
     private fun setUpRecyclerView() {
+        adapter = CartAdapter(carts, this, glide)
         binding.completeButton.setOnClickListener(this)
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         binding.recyclerView.adapter = adapter
     }
 
     private fun subscribeToObserver() {
-        viewModel = getViewModel()
         viewModel.showEmptyCart.observe(viewLifecycleOwner, Observer {
             if (it) {
                 binding.progressBar.visibility = View.INVISIBLE
@@ -64,7 +72,10 @@ class CartFragment : Fragment(), View.OnClickListener, CartAdapter.OnItemClickLi
 
     override fun onItemClick(position: Int) {
         this.findNavController().navigate(
-            CartFragmentDirections.actionCartFragmentToDetailFragment(carts[position].id,carts[position].imageUrl)
+            CartFragmentDirections.actionCartFragmentToDetailFragment(
+                carts[position].id,
+                carts[position].imageUrl
+            )
         )
     }
 

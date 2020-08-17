@@ -6,13 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.example.resdelivery.databinding.CartListItemBinding
 import com.example.resdelivery.models.Meal
-import org.koin.core.KoinComponent
-import org.koin.core.get
 import kotlin.math.roundToInt
 
 class CartAdapter(
     private var list: MutableList<Meal>,
-    private val listener: OnItemClickListener? = null
+    private val listener: OnItemClickListener? = null,
+    private val glide : RequestManager
 ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
 
@@ -25,7 +24,7 @@ class CartAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = CartListItemBinding.inflate(inflater, parent, false)
-        return CartViewHolder(binding, listener)
+        return CartViewHolder(binding, listener,glide)
     }
 
 
@@ -42,10 +41,9 @@ class CartAdapter(
 
     class CartViewHolder(
         val binding: CartListItemBinding,
-        val listener: OnItemClickListener?
-    ) : RecyclerView.ViewHolder(binding.root), KoinComponent {
-
-        private val glide: RequestManager = get()
+        val listener: OnItemClickListener?,
+        val glide : RequestManager
+    ) : RecyclerView.ViewHolder(binding.root){
 
         fun onBind(meal: Meal) {
             binding.cartRate.text = meal.rate.roundToInt().toString()

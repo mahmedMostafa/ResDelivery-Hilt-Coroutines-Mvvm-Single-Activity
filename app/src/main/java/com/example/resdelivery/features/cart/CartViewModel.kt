@@ -1,5 +1,6 @@
 package com.example.resdelivery.features.cart
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,9 +13,9 @@ import timber.log.Timber
 
 enum class CartStatus { LOADING, SUCCESS, ERROR }
 
-class CartViewModel(
+class CartViewModel @ViewModelInject constructor(
     private val sessionManagement: SessionManagement,
-    private val database : FirebaseFirestore
+    private val database: FirebaseFirestore
 ) : ViewModel() {
 
     private val _status = MutableLiveData<CartStatus>()
@@ -69,10 +70,11 @@ class CartViewModel(
                 }
         }
     }
-    fun removeFromCart(meal : Meal){
+
+    fun removeFromCart(meal: Meal) {
         sessionManagement.getValue(KEY_USER_ID)?.let {
             database.collection("users/").document(it).collection("cart/")
-                .document(meal.id).delete().addOnCompleteListener{task->
+                .document(meal.id).delete().addOnCompleteListener { task ->
                     Timber.d("Deleted from firebase")
                 }
         }

@@ -9,14 +9,13 @@ import com.bumptech.glide.RequestManager
 import com.example.resdelivery.databinding.FoodListItemBinding
 import com.example.resdelivery.models.Meal
 import com.example.resdelivery.models.Meals
-import org.koin.core.KoinComponent
-import org.koin.core.get
 import timber.log.Timber
 import kotlin.math.roundToInt
 
 class FoodListAdapter(
     private val listener: OnItemClickListener? = null,
-    private val meals: ArrayList<Meal>
+    private val meals: ArrayList<Meal>,
+    private val glide : RequestManager
 ) : RecyclerView.Adapter<FoodListAdapter.FoodViewHolder>() {
 
 
@@ -27,7 +26,7 @@ class FoodListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FoodViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = FoodListItemBinding.inflate(layoutInflater, parent, false)
-        return FoodViewHolder(binding, listener)
+        return FoodViewHolder(binding, listener,glide)
     }
 
     override fun onBindViewHolder(holder: FoodViewHolder, position: Int) {
@@ -56,10 +55,9 @@ class FoodListAdapter(
 
     inner class FoodViewHolder(
         val binding: FoodListItemBinding,
-        val listener: OnItemClickListener?
-    ) : RecyclerView.ViewHolder(binding.root), KoinComponent {
-
-        val glide: RequestManager = get()
+        val listener: OnItemClickListener?,
+        val glide: RequestManager
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Meal) {
             //for the sake of this animation to work kinda properly i animated the image only not the container

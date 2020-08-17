@@ -7,10 +7,11 @@ import com.example.resdelivery.util.SessionManagement
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
+import javax.inject.Inject
 
-class RegisterViewModel(
+class RegisterViewModel @Inject constructor(
     private val sessionManagement: SessionManagement,
-    private val auth : FirebaseAuth,
+    private val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore
 ) : ViewModel() {
 

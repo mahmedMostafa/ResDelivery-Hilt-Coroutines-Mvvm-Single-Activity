@@ -7,11 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.resdelivery.R
 import com.example.resdelivery.databinding.FragmentRegisterBinding
-import org.koin.android.viewmodel.ext.android.getViewModel
 
 /**
  * A simple [Fragment] subclass.
@@ -20,7 +20,7 @@ class RegisterFragment : Fragment(), View.OnClickListener {
 
 
     private lateinit var binding: FragmentRegisterBinding
-    private lateinit var viewModel: RegisterViewModel
+    private val viewModel: RegisterViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,10 +35,9 @@ class RegisterFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initViewModel() {
-        viewModel  = getViewModel()
         viewModel.navigateToMap.observe(viewLifecycleOwner, Observer {
             it?.let {
-                if(it){
+                if (it) {
                     this.findNavController().navigate(
                         RegisterFragmentDirections.actionRegisterFragmentToFoodListFragment()
                     )
@@ -48,7 +47,7 @@ class RegisterFragment : Fragment(), View.OnClickListener {
         })
         viewModel.showProgress.observe(viewLifecycleOwner, Observer {
             it?.let {
-                if(it)
+                if (it)
                     binding.progressBar.visibility = View.VISIBLE
                 else
                     binding.progressBar.visibility = View.INVISIBLE

@@ -1,5 +1,6 @@
 package com.example.resdelivery.features.food.representation
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.resdelivery.features.food.domain.FoodListRepository
 import com.example.resdelivery.models.Meal
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @ExperimentalCoroutinesApi
-class FoodListViewModel(
+class FoodListViewModel @ViewModelInject constructor(
     private val repository: FoodListRepository
 ) : ViewModel() {
 

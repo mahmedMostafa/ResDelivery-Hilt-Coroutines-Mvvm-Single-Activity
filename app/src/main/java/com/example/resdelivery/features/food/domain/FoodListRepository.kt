@@ -16,9 +16,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import timber.log.Timber
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class FoodListRepository(
+class FoodListRepository @Inject constructor(
     private val foodApi: ApiService,
     private val fusedLocationProviderClient: FusedLocationProviderClient,
     private val sessionManagement: SessionManagement,

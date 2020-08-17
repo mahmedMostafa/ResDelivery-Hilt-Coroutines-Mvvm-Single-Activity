@@ -8,8 +8,10 @@ import com.example.resdelivery.R
 import com.example.resdelivery.databinding.ActivityMainBinding
 import com.example.resdelivery.util.NetworkUtils
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

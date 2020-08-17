@@ -1,30 +1,33 @@
 package com.example.resdelivery.features.login
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.resdelivery.R
 import com.example.resdelivery.databinding.FragmentLoginBinding
 import com.example.resdelivery.util.SessionManagement
-import org.koin.android.ext.android.get
-import org.koin.android.viewmodel.ext.android.getViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
  */
+@AndroidEntryPoint
 class LoginFragment : Fragment(), View.OnClickListener {
 
 
     private lateinit var binding: FragmentLoginBinding
-    private lateinit var viewModel: LoginViewModel
+    private val viewModel: LoginViewModel by viewModels()
 
-    private val sessionManagement: SessionManagement = get()
+    @Inject
+    lateinit var sessionManagement: SessionManagement
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +47,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
     }
 
     private fun subscribeToObservers() {
-        viewModel = getViewModel()
         viewModel.errorMessage.observe(viewLifecycleOwner, Observer {
             it?.let {
                 Toast.makeText(activity, it, Toast.LENGTH_LONG).show()

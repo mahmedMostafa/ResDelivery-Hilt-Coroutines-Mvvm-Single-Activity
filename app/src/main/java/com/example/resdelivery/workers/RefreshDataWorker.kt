@@ -1,22 +1,27 @@
 package com.example.resdelivery.workers
 
 import android.content.Context
+import androidx.hilt.Assisted
+import androidx.hilt.work.WorkerInject
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.resdelivery.features.food.domain.FoodListRepository
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import retrofit2.HttpException
 
-class RefreshDataWorker(appContext: Context, params: WorkerParameters) :
-    CoroutineWorker(appContext, params), KoinComponent {
+@ExperimentalCoroutinesApi
+class RefreshDataWorker @WorkerInject constructor(
+    @Assisted appContext: Context,
+    @Assisted params: WorkerParameters,
+    private val repository: FoodListRepository
+) :
+    CoroutineWorker(appContext, params) {
 
     companion object {
         const val WORK_NAME = "RefreshDataWorker"
     }
 
     override suspend fun doWork(): Result {
-        val repository: FoodListRepository by inject()
         return try {
             repository.refreshMealsInBackground()
             Result.success()

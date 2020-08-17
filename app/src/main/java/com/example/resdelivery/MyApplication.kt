@@ -2,21 +2,27 @@ package com.example.resdelivery
 
 import android.app.Application
 import android.os.Build
+import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.*
-import com.example.resdelivery.di.*
 import com.example.resdelivery.workers.RefreshDataWorker
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
-class MyApplication : Application() {
+@ExperimentalCoroutinesApi
+@HiltAndroidApp
+class MyApplication : Application(), Configuration.Provider {
 
     private val applicationScope = CoroutineScope(Dispatchers.Default)
+
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
 
     override fun onCreate() {
         super.onCreate()
@@ -26,14 +32,6 @@ class MyApplication : Application() {
         }
         delayInit()
         //setting up koin
-        startKoin {
-            androidContext(this@MyApplication)
-            modules(appModule)
-            modules(viewModelModule)
-            modules(networkModule)
-            modules(persistenceModule)
-            modules(repositoryModule)
-        }
     }
 
     private fun delayInit() = applicationScope.launch {
@@ -62,4 +60,8 @@ class MyApplication : Application() {
             repeatingRequest
         )
     }
+
+    override fun getWorkManagerConfiguration() = Configuration.Builder()
+        .setWorkerFactory(workerFactory)
+        .build()
 }

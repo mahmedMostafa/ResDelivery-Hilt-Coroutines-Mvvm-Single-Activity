@@ -1,5 +1,6 @@
 package com.example.resdelivery.features.detail.representation
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.resdelivery.features.detail.domain.DetailRepository
 import com.example.resdelivery.models.Meal
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 
 
 @ExperimentalCoroutinesApi
-class DetailViewModel(
+class DetailViewModel @ViewModelInject constructor(
     private val repository: DetailRepository
 ) : ViewModel() {
 

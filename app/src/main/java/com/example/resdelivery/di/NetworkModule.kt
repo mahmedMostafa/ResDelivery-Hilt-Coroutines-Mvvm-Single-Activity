@@ -1,32 +1,42 @@
 package com.example.resdelivery.di
 
 import com.example.resdelivery.data.network.ApiService
-import com.example.resdelivery.util.C.Companion.BASE_URL
+import com.example.resdelivery.util.C
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import org.koin.dsl.module
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Singleton
 
 
-val networkModule = module {
+@InstallIn(ApplicationComponent::class)
+@Module
+object NetworkModule {
 
-    single {
-        Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
-    }
+    @Singleton
+    @Provides
+    fun provideMoshiBuilder(): Moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
 
-    single {
-        Retrofit.Builder()
+    @Singleton
+    @Provides
+    fun provideRetrofit(moshi: Moshi): Retrofit {
+        return Retrofit.Builder()
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
-            .addConverterFactory(MoshiConverterFactory.create(get<Moshi>()))
-            .baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .baseUrl(C.BASE_URL)
             .build()
     }
 
-    single {
-        get<Retrofit>().create(ApiService::class.java)
+    @Singleton
+    @Provides
+    fun provideApi(retrofit: Retrofit): ApiService {
+        return retrofit.create(ApiService::class.java)
     }
 }
