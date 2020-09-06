@@ -1,6 +1,8 @@
 package com.example.resdelivery.di
 
+import androidx.paging.ExperimentalPagingApi
 import com.example.resdelivery.data.local.MealsDao
+import com.example.resdelivery.data.local.MealsDatabase
 import com.example.resdelivery.data.network.ApiService
 import com.example.resdelivery.features.detail.domain.DetailRepository
 import com.example.resdelivery.features.food.domain.FoodListRepository
@@ -15,6 +17,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Singleton
 
 
+@ExperimentalPagingApi
 @ExperimentalCoroutinesApi
 @InstallIn(ApplicationComponent::class)
 @Module
@@ -26,9 +29,9 @@ object RepositoriesModule {
         foodApi: ApiService,
         fusedLocationProviderClient: FusedLocationProviderClient,
         sessionManagement: SessionManagement,
-        mealsDao: MealsDao
+        database : MealsDatabase
     ): FoodListRepository {
-        return FoodListRepository(foodApi, fusedLocationProviderClient, sessionManagement, mealsDao)
+        return FoodListRepository(foodApi, fusedLocationProviderClient, sessionManagement, database)
     }
 
     @Singleton

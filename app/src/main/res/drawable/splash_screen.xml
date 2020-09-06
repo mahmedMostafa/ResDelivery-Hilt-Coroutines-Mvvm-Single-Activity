@@ -4,10 +4,10 @@
 
     <item android:drawable="@color/colorPrimary" />
 
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/delivery_man" />
-    </item>
+<!--    <item>-->
+<!--        <bitmap-->
+<!--            android:gravity="center"-->
+<!--            android:src="@drawable/delivery_man" />-->
+<!--    </item>-->
 
 </layer-list>

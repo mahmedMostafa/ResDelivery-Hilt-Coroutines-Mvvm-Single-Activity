@@ -1,92 +1,51 @@
 package com.example.resdelivery.features.food.representation
 
+import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.resdelivery.features.food.domain.FoodListRepository
 import com.example.resdelivery.models.Meal
-import com.example.resdelivery.models.Meals
-import com.example.resdelivery.util.Result
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
-import timber.log.Timber
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
+@ExperimentalPagingApi
 @ExperimentalCoroutinesApi
 class FoodListViewModel @ViewModelInject constructor(
-    private val repository: FoodListRepository
+    private val repository: FoodListRepository,
+    @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
 
-    var pageNumber = 1
-    var reachedLastMeals = false
 
-    private val _meals = MutableLiveData<ArrayList<Meal>>()
-    val meals: LiveData<ArrayList<Meal>> get() = _meals
+    private var currentQuery: String? = null
 
-    private val _loading = MutableLiveData(true)
-    private val _paginationLoading = MutableLiveData(false)
-    val loading: LiveData<Boolean> get() = _loading
-    val paginationLoading: LiveData<Boolean> get() = _paginationLoading
+    private var currentMeals: Flow<PagingData<Meal>>? = null
 
-    init {
-        getMeals(pageNumber)
-    }
+    private val _meals = MutableLiveData<PagingData<Meal>>()
+    val meals: LiveData<PagingData<Meal>> get() = _meals
 
-    fun getMoreMeals() {
-        if (!reachedLastMeals) {
-            pageNumber++
-            Timber.d("Current page number is $pageNumber")
-            getMeals(pageNumber)
-        } else {
-            _loading.value = false
-            _paginationLoading.value = false
+    fun searchMeals(query: String): Flow<PagingData<Meal>> {
+        val lastMeals = currentMeals
+        if (query == currentQuery && lastMeals != null) {
+            return lastMeals
         }
+        currentQuery = query
+        val newResult = repository.getMealsPage(query).cachedIn(viewModelScope)
+        currentMeals = newResult
+        return newResult
     }
 
-    fun getMeals(pageNumber: Int) = viewModelScope.launch {
-        Timber.d("Gemy Meals Called")
-        repository.refreshMeals(pageNumber)
-//            .onStart { _loading.value = true }
-            .catch { Timber.e("Error from flows $it") }
-            .collect {
-                if (it is Result.Loading) {
-                    //if it's the first page then show the refresh loading not the pagination loading
-                    if (pageNumber == 1) {
-                        _loading.value = true
-                    } else {
-                        _paginationLoading.value = true
-                    }
-                } else {
-                    Timber.d("Current Result is ${it}")
-                    val currentMeals = (it as Result.Success).data
-                    //if it's the first page hide the refresh loading and set the list
-                    if (pageNumber == 1) {
-                        _loading.value = false
-                        _meals.value = currentMeals
-                    } else {
-                        //if not we hide the pagination loading and add the list to the existing one
-                        if (currentMeals.isEmpty()) {
-                            reachedLastMeals = true
-                            _paginationLoading.value = false
-                        } else {
-                            _paginationLoading.value = false
-                            val oldMeals: ArrayList<Meal> = _meals.value ?: arrayListOf()
-                            oldMeals.addAll(currentMeals)
-                            _meals.value = oldMeals
-                        }
-                    }
-                }
-            }
-    }
-
-    fun getLastKnownLocation() {
-        repository.getLastKnownLocation()
+    fun getMeals(query: String) = viewModelScope.launch {
+        if (query == currentQuery) return@launch
+        currentQuery = query
+        repository.getMealsPage(query).cachedIn(viewModelScope).collect {
+            _meals.value = it
+        }
     }
 
     fun logOutUser() {
         repository.logOutUser()
     }
-
 }

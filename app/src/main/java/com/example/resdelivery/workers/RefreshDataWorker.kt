@@ -23,7 +23,7 @@ class RefreshDataWorker @WorkerInject constructor(
 
     override suspend fun doWork(): Result {
         return try {
-            repository.refreshMealsInBackground()
+//            repository.refreshMealsInBackground()
             Result.success()
         } catch (e: HttpException) {
             Result.retry()

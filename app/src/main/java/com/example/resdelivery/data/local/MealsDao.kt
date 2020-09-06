@@ -1,6 +1,7 @@
 package com.example.resdelivery.data.local
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.IGNORE
@@ -21,11 +22,15 @@ interface MealsDao {
     fun updateMeal(id: String, title: String, imageUrl: String, rate: Double)
 
     @Query("select * from meals")
-    fun getMeals(): List<Meal>
+    fun getMeals(): PagingSource<Int, Meal>
 
     @Query("select * from meals where id = :mealId")
     fun getMealById(mealId: String): Meal
 
-    @Query("select * from meals where title like '%' || :query || '%' or ingredients like '%' || :query || '%' limit (:page *30)")
+    @Query("delete from meals")
+    fun clearAllMeals()
+
+    //for old branch
+    @Query("select * from meals where title like :query or ingredients like :query limit (:page *30)")
     fun searchMeal(query: String, page: Int): LiveData<List<Meal>>
 }

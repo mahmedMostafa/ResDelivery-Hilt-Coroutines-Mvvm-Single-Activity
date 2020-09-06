@@ -1,8 +1,10 @@
 package com.example.resdelivery.features.detail.representation
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,6 +20,7 @@ import com.example.resdelivery.models.Meal
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
+
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -35,7 +38,6 @@ class DetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        requireContext().theme.applyStyle(R.style.DetailStyle, true)
         binding = DataBindingUtil.inflate(inflater, R.layout.detail_fragment, container, false)
         return binding.root
     }
@@ -73,9 +75,28 @@ class DetailFragment : Fragment() {
         binding.toolBar.setupWithNavController(findNavController())
     }
 
+    override fun onResume() {
+        super.onResume()
+//        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        requireActivity().window.statusBarColor = Color.TRANSPARENT;
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+//        val window = requireActivity().window
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.detail_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

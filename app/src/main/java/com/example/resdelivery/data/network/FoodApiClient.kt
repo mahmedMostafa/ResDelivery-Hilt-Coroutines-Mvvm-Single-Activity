@@ -11,7 +11,8 @@ interface ApiService {
     @GET("api/search")
     suspend fun getFood(
         @Query("q") query: String,
-        @Query("page") pageNumber: Int
+        @Query("page") pageNumber: Int,
+        @Query("per_page") itemsPerPage: Int
     ): FoodListResponse
 
     @GET("api/get")

@@ -2,8 +2,15 @@ package com.example.resdelivery.features.food.domain
 
 import android.annotation.SuppressLint
 import android.location.Location
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.resdelivery.data.local.MealsDao
+import com.example.resdelivery.data.local.MealsDatabase
 import com.example.resdelivery.data.network.ApiService
+import com.example.resdelivery.features.food.data.MealsPagingSource
+import com.example.resdelivery.features.food.data.MealsRemoteMediator
 import com.example.resdelivery.models.Meal
 import com.example.resdelivery.models.Meals
 import com.example.resdelivery.util.Result
@@ -18,52 +25,72 @@ import kotlinx.coroutines.flow.flowOn
 import timber.log.Timber
 import javax.inject.Inject
 
+@ExperimentalPagingApi
 @ExperimentalCoroutinesApi
 class FoodListRepository @Inject constructor(
     private val foodApi: ApiService,
     private val fusedLocationProviderClient: FusedLocationProviderClient,
     private val sessionManagement: SessionManagement,
-    private val mealsDao: MealsDao
+    private val database: MealsDatabase
 ) {
 
-    fun refreshMeals(page: Int): Flow<Result<ArrayList<Meal>>> {
-        return flow {
-            emit(Result.Loading)
-            try {
-                val meals = foodApi.getFood("Bacon", page).meals as ArrayList
-                updateCache(meals)
-                emit(Result.Success(meals))
-            } catch (e: Exception) {
-                Timber.e("Gemy error is ${e.message}")
-                //TODO make the error
-                emit(Result.Success(mealsDao.getMeals() as ArrayList))
-            }
-        }.flowOn(Dispatchers.IO)
+    fun getMealsPage(query: String): Flow<PagingData<Meal>> {
+        Timber.d("Gemy New Query")
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+//            remoteMediator = MealsRemoteMediator(
+//                query, foodApi, database
+//            ),
+//            pagingSourceFactory = {
+//                // our meals are paging source from room
+//                database.getMealsDao().getMeals()
+//            }
+            pagingSourceFactory = { MealsPagingSource(foodApi, query) }
+        ).flow
     }
 
-    private fun updateCache(meals: Meals) {
-        for ((i, id) in mealsDao.insertMeals(meals).withIndex()) {
-            Timber.d("$i")
-            if (id == -1L) {
-                mealsDao.updateMeal(
-                    meals[i].id,
-                    meals[i].title,
-                    meals[i].imageUrl,
-                    meals[i].rate
-                )
-            }
-        }
-    }
-
-    suspend fun refreshMealsInBackground() {
-        try {
-            val meals = foodApi.getFood("Breakfast", 2).meals
-            updateCache(meals)
-        } catch (e: java.lang.Exception) {
-            Timber.e("Couldn't refresh meals")
-            Timber.e(e)
-        }
-    }
+//    fun refreshMeals(page: Int): Flow<Result<ArrayList<Meal>>> {
+//        return flow {
+//            emit(Result.Loading)
+//            try {
+//                val meals = foodApi.getFood("Bacon", page).meals as ArrayList
+//                updateCache(meals)
+//                emit(Result.Success(meals))
+//            } catch (e: Exception) {
+//                Timber.e("Gemy error is ${e.message}")
+//                //TODO make the error
+//                emit(Result.Success(mealsDao.getMeals() as ArrayList))
+//            }
+//        }.flowOn(Dispatchers.IO)
+//    }
+//
+//    private fun updateCache(meals: Meals) {
+//        for ((i, id) in mealsDao.insertMeals(meals).withIndex()) {
+//            Timber.d("$i")
+//            if (id == -1L) {
+//                mealsDao.updateMeal(
+//                    meals[i].id,
+//                    meals[i].title,
+//                    meals[i].imageUrl,
+//                    meals[i].rate
+//                )
+//            }
+//        }
+//    }
+//
+//    suspend fun refreshMealsInBackground() {
+//        try {
+//            val meals = foodApi.getFood("Breakfast", 2).meals
+//            updateCache(meals)
+//        } catch (e: java.lang.Exception) {
+//            Timber.e("Couldn't refresh meals")
+//            Timber.e(e)
+//        }
+//    }
 
     @SuppressLint("MissingPermission") // will be added later
     fun getLastKnownLocation() {
@@ -95,5 +122,9 @@ class FoodListRepository @Inject constructor(
 
     fun logOutUser() {
         sessionManagement.clearUser()
+    }
+
+    companion object {
+        private const val PAGE_SIZE = 10
     }
 }

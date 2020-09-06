@@ -3,9 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-    </data>
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/item_container"
         android:layout_width="match_parent"
@@ -21,47 +18,44 @@
             android:layout_height="match_parent">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:transitionName="shared_container"
                 android:id="@+id/food_item_image"
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:scaleType="fitXY"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:transitionName="shared_container"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
             <androidx.appcompat.widget.AppCompatTextView
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
                 android:id="@+id/food_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:maxLines="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="2"
                 android:padding="6dp"
-                android:textSize="16sp"
-                android:textColor="@color/colorTextPrimary"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/food_item_image"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@id/food_item_image"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="Checken nuggets" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/food_item_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
                 android:paddingBottom="4dp"
                 android:textColor="#2196F3"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@id/food_item_title"
                 app:layout_constraintTop_toBottomOf="@id/food_item_title"
                 tools:text="100" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-        
+
     </com.google.android.material.card.MaterialCardView>
 </layout>

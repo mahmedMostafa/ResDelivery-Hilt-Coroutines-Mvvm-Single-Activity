@@ -23,22 +23,23 @@ class SplashFragment : Fragment() {
     lateinit var sessionManagement: SessionManagement
     private val handler = Handler()
     private val runnable = Runnable {
-        if (sessionManagement.isLoggedIn()) {
-            findNavController().navigate(
-                R.id.foodListFragment
-            )
-        } else {
-            findNavController().navigate(
-                R.id.loginFragment
-            )
-        }
+        findNavController().navigate(R.id.foodListFragment)
+//        if (sessionManagement.isLoggedIn()) {
+//            findNavController().navigate(
+//                R.id.foodListFragment
+//            )
+//        } else {
+//            findNavController().navigate(
+//                R.id.loginFragment
+//            )
+//        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        handler.postDelayed(runnable, 3)
+        handler.postDelayed(runnable, 500)
         return inflater.inflate(R.layout.fragment_splash, container, false)
     }
 

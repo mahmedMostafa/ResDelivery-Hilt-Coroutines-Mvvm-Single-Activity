@@ -16,7 +16,6 @@ class CartAdapter(
 
 
     interface OnItemClickListener {
-
         fun onItemClick(position: Int)
         fun onCloseImgClick(position: Int)
     }

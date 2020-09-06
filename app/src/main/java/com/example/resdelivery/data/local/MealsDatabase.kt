@@ -6,14 +6,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.resdelivery.models.Meal
+import com.example.resdelivery.models.RemoteKeys
 
-@Database(entities = [Meal::class], version = 1, exportSchema = false)
+@Database(entities = [Meal::class, RemoteKeys::class], version = 2, exportSchema = false)
 @TypeConverters(IngredientsTypeConverter::class)
 abstract class MealsDatabase : RoomDatabase() {
 
     abstract fun getMealsDao(): MealsDao
+    abstract fun getRemoteKeysDao(): RemoteKeysDao
 
-    //probably won't need this
+    //probably won't need this since we are using hilt
     companion object {
         @Volatile
         private var instance: MealsDatabase? = null
@@ -34,5 +36,8 @@ abstract class MealsDatabase : RoomDatabase() {
             }
         }
     }
+
+
+
 
 }

@@ -24,7 +24,9 @@ object PersistenceModule {
             context,
             MealsDatabase::class.java,
             "meals.db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Singleton
